@@ -81,6 +81,7 @@ func (display AppSummaryDisplayer) displayAppInstancesTable(processSummary v7act
 			display.UI.TranslateText("cpu"),
 			display.UI.TranslateText("memory"),
 			display.UI.TranslateText("disk"),
+			display.UI.TranslateText("logging"),
 			display.UI.TranslateText("details"),
 		},
 	}
@@ -98,6 +99,10 @@ func (display AppSummaryDisplayer) displayAppInstancesTable(processSummary v7act
 			display.UI.TranslateText("{{.DiskUsage}} of {{.DiskQuota}}", map[string]interface{}{
 				"DiskUsage": bytefmt.ByteSize(instance.DiskUsage),
 				"DiskQuota": bytefmt.ByteSize(instance.DiskQuota),
+			}),
+			display.UI.TranslateText("{{.LogRate}}/s of {{.LogRateLimit}}/s", map[string]interface{}{
+				"LogRate":      bytefmt.ByteSize(instance.LogRate),
+				"LogRateLimit": bytefmt.ByteSize(instance.LogRateLimit),
 			}),
 			instance.Details,
 		})
