@@ -17,10 +17,10 @@ type ScaleCommand struct {
 	Force               bool                    `long:"force" short:"f" description:"Force restart of app without prompt"`
 	Instances           flag.Instances          `long:"instances" short:"i" required:"false" description:"Number of instances"`
 	DiskLimit           flag.Megabytes          `short:"k" required:"false" description:"Disk limit (e.g. 256M, 1024M, 1G)"`
+	LogRateLimit        flag.BytesWithUnlimited `short:"l" required:"false" description:"Log rate limit (e.g. 256M, 1024M, 1G)"`
 	MemoryLimit         flag.Megabytes          `short:"m" required:"false" description:"Memory limit (e.g. 256M, 1024M, 1G)"`
-	LogRateLimit        flag.BytesWithUnlimited `short:"l" required:"false" description:"Log Rate Limit (e.g. 256M, 1024M, 1G)"`
 	ProcessType         string                  `long:"process" default:"web" description:"App process to scale"`
-	usage               interface{}             `usage:"CF_NAME scale APP_NAME [--process PROCESS] [-i INSTANCES] [-k DISK] [-m MEMORY] [-l LOG_RATE_LIMIT] [-f]\n\n   Modifying the app's disk or memory will cause the app to restart."`
+	usage               interface{}             `usage:"CF_NAME scale APP_NAME [--process PROCESS] [-i INSTANCES] [-k DISK] [-m MEMORY] [-l LOG_RATE_LIMIT] [-f]\n\n   Modifying the app's disk, memory, or log rate will cause the app to restart."`
 	relatedCommands     interface{}             `related_commands:"push"`
 	envCFStartupTimeout interface{}             `environmentName:"CF_STARTUP_TIMEOUT" environmentDescription:"Max wait time for app instance startup, in minutes" environmentDefault:"5"`
 }
