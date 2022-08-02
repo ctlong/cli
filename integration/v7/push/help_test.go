@@ -31,13 +31,13 @@ var _ = Describe("help", func() {
 				"[-i NUM_INSTANCES]",
 				"[-k DISK]",
 				"[-m MEMORY]",
+				"[-l LOG_RATE_LIMIT]",
 				"[-p PATH]",
 				"[-s STACK]",
 				"[-t HEALTH_TIMEOUT]",
 				"[--task TASK]",
 				"[-u (process | port | http)]",
 				"[--no-route | --random-route]",
-				"[-l LOG_RATE_LIMIT]",
 				"[--var KEY=VALUE]",
 				"[--vars-file VARS_FILE_PATH]...",
 			}
@@ -56,13 +56,13 @@ var _ = Describe("help", func() {
 				"[-i NUM_INSTANCES]",
 				"[-k DISK]",
 				"[-m MEMORY]",
+				"[-l LOG_RATE_LIMIT]",
 				"[-p PATH]",
 				"[-s STACK]",
 				"[-t HEALTH_TIMEOUT]",
 				"[--task TASK]",
 				"[-u (process | port | http)]",
 				"[--no-route | --random-route ]",
-				"[-l LOG_RATE_LIMIT]",
 				"[--var KEY=VALUE]",
 				"[--vars-file VARS_FILE_PATH]...",
 			}
@@ -79,6 +79,7 @@ var _ = Describe("help", func() {
 			Eventually(session).Should(Say(`--endpoint`))
 			Eventually(session).Should(Say(`--health-check-type, -u`))
 			Eventually(session).Should(Say(`--instances, -i`))
+			Eventually(session).Should(Say(`--log-rate-limit, -l\s+Log rate limit per second, in bytes \(e.g. 128B, 4K, 1M\). -1 represents unlimited.`))
 			Eventually(session).Should(Say(`--manifest, -f`))
 			Eventually(session).Should(Say(`--memory, -m`))
 			Eventually(session).Should(Say(`--no-manifest`))
@@ -91,7 +92,6 @@ var _ = Describe("help", func() {
 			Eventually(session).Should(Say(`--start-command, -c`))
 			Eventually(session).Should(Say(`--strategy`))
 			Eventually(session).Should(Say(`--task`))
-			Eventually(session).Should(Say(`--log-rate-limit, -l\s+Log rate limit per second, in bytes \(e.g. 128B, 4K, 1M\). -1 represents unlimited.`))
 			Eventually(session).Should(Say(`--var`))
 			Eventually(session).Should(Say(`--vars-file`))
 			Eventually(session).Should(Say("ENVIRONMENT:"))
