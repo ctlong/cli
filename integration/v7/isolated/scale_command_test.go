@@ -229,6 +229,33 @@ var _ = Describe("scale command", func() {
 					})
 				})
 
+				When("Scaling the log rate limit", func() {
+					It("scales log rate limit to 1M", func() {
+						buffer := NewBuffer()
+						_, err := buffer.Write([]byte("y\n"))
+						Expect(err).ToNot(HaveOccurred())
+						session := helpers.CFWithStdin(buffer, "scale", appName, "-l", "1M")
+						Eventually(session).Should(Exit(0))
+						Expect(session).To(Say(`Scaling app %s in org %s / space %s as %s\.\.\.`, appName, orgName, spaceName, userName))
+						Expect(session).To(Say(`This will cause the app to restart\. Are you sure you want to scale %s\? \[yN\]:`, appName))
+						Expect(session).To(Say(`Stopping app %s in org %s / space %s as %s\.\.\.`, appName, orgName, spaceName, userName))
+						Expect(session).To(Say(`Starting app %s in org %s / space %s as %s\.\.\.`, appName, orgName, spaceName, userName))
+						Expect(session).To(Say(`Instances starting\.\.\.`))
+
+						helpers.WaitForLogRateLimitToTakeEffect(appName, 0, 0, false, "512M")
+					})
+
+					When("-f flag provided", func() {
+						It("scales without prompt", func() {
+							session := helpers.CF("scale", appName, "-l", "1M", "-f")
+							Eventually(session).Should(Exit(0))
+							Expect(session).To(Say("Scaling app %s in org %s / space %s as %s...", appName, orgName, spaceName, userName))
+
+							helpers.WaitForLogRateLimitToTakeEffect(appName, 0, 0, false, "512M")
+						})
+					})
+				})
+
 				When("Scaling to 0 instances", func() {
 					It("scales to 0 instances", func() {
 						session := helpers.CF("scale", appName, "-i", "0")
