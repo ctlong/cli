@@ -19,7 +19,7 @@ var _ = Describe("run-task command", func() {
 			Expect(session).To(Say("NAME:"))
 			Expect(session).To(Say("   run-task - Run a one-off task on an app"))
 			Expect(session).To(Say("USAGE:"))
-			Expect(session).To(Say(`   cf run-task APP_NAME \[--command COMMAND\] \[-k DISK] \[-m MEMORY\] \[--name TASK_NAME\] \[--process PROCESS_TYPE\]`))
+			Expect(session).To(Say(`   cf run-task APP_NAME \[--command COMMAND\] \[-k DISK] \[-m MEMORY\] \[-l LOG_RATE_LIMIT\] \[--name TASK_NAME\] \[--process PROCESS_TYPE\]`))
 			Expect(session).To(Say("TIP:"))
 			Expect(session).To(Say("   Use 'cf logs' to display the logs of the app and all its tasks. If your task name is unique, grep this command's output for the task name to view task-specific logs."))
 			Expect(session).To(Say("EXAMPLES:"))
@@ -29,6 +29,7 @@ var _ = Describe("run-task command", func() {
 			Expect(session).To(Say("OPTIONS:"))
 			Expect(session).To(Say(`   --command, -c\s+The command to execute`))
 			Expect(session).To(Say(`   -k                 Disk limit \(e\.g\. 256M, 1024M, 1G\)`))
+			Expect(session).To(Say(`   -l                 Log rate limit per second, in bytes \(e\.g\. 128B, 4K, 1M\)`))
 			Expect(session).To(Say(`   -m                 Memory limit \(e\.g\. 256M, 1024M, 1G\)`))
 			Expect(session).To(Say(`   --name             Name to give the task \(generated if omitted\)`))
 			Expect(session).To(Say(`   --process          Process type to use as a template for command, memory, and disk for the created task`))
@@ -126,6 +127,29 @@ var _ = Describe("run-task command", func() {
 							session = helpers.CF("tasks", appName, "-v")
 							Eventually(session).Should(Exit(0))
 							Expect(session).To(Say("\"disk_in_mb\": %d", diskSpace))
+						})
+					})
+				})
+
+				When("log rate limit is provided", func() {
+					When("the provided log rate limit is invalid", func() {
+						It("displays error and exits 1", func() {
+							session := helpers.CF("run-task", appName, "--command", "echo hi", "-l", "invalid")
+							Eventually(session).Should(Exit(1))
+							Expect(session.Err).Should(Say("Byte quantity must be an integer with a unit of measurement like B, K, KB, M, MB, G, or GB"))
+
+						})
+					})
+
+					When("the provided log rate limit is valid", func() {
+						It("runs the task with the provided log rate limit", func() {
+							logRateLimit := 1024
+							session := helpers.CF("run-task", appName, "--command", "echo hi", "-l", fmt.Sprintf("%dB", logRateLimit))
+							Eventually(session).Should(Exit(0))
+
+							session = helpers.CF("tasks", appName, "-v")
+							Eventually(session).Should(Exit(0))
+							Expect(session).To(Say("\"log_rate_limit_bytes_per_second\": %d", logRateLimit))
 						})
 					})
 				})

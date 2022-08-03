@@ -30,13 +30,13 @@ var _ = Describe("scale command", func() {
 
 	Describe("help", func() {
 		When("--help flag is set", func() {
-			FIt("appears in cf help -a", func() {
+			It("appears in cf help -a", func() {
 				session := helpers.CF("help", "-a")
 				Eventually(session).Should(Exit(0))
 				Expect(session).To(HaveCommandInCategoryWithDescription("scale", "APPS", "Change or view the instance count, disk space limit, memory limit, and log rate limit for an app"))
 			})
 
-			FIt("displays command usage to output", func() {
+			It("displays command usage to output", func() {
 				session := helpers.CF("scale", "--help")
 
 				Eventually(session).Should(Say("NAME:"))
@@ -50,7 +50,7 @@ var _ = Describe("scale command", func() {
 				Eventually(session).Should(Say(`-f\s+Force restart of app without prompt`))
 				Eventually(session).Should(Say(`-i\s+Number of instances`))
 				Eventually(session).Should(Say(`-k\s+Disk limit \(e\.g\. 256M, 1024M, 1G\)`))
-				Eventually(session).Should(Say(`-l\s+Log rate limit \(e\.g\. 256M, 1024M, 1G\)`))
+				Eventually(session).Should(Say(`-l\s+Log rate limit per second, in bytes \(e\.g\. 128B, 4K, 1M\)`))
 				Eventually(session).Should(Say(`-m\s+Memory limit \(e\.g\. 256M, 1024M, 1G\)`))
 				Eventually(session).Should(Say(`--process\s+App process to scale \(Default: web\)`))
 
