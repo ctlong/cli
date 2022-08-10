@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 
+	"code.cloudfoundry.org/cli/api/cloudcontroller/ccversion"
 	. "code.cloudfoundry.org/cli/cf/util/testhelpers/matchers"
 
 	"code.cloudfoundry.org/cli/integration/helpers"
@@ -231,6 +232,10 @@ var _ = Describe("scale command", func() {
 				})
 
 				When("Scaling the log rate limit", func() {
+					BeforeEach(func() {
+						helpers.SkipIfVersionLessThan(ccversion.MinVersionLogRateLimitingV3)
+					})
+
 					It("scales log rate limit to 1M", func() {
 						buffer := NewBuffer()
 						_, err := buffer.Write([]byte("y\n"))
@@ -243,7 +248,7 @@ var _ = Describe("scale command", func() {
 						Expect(session).To(Say(`Starting app %s in org %s / space %s as %s\.\.\.`, appName, orgName, spaceName, userName))
 						Expect(session).To(Say(`Instances starting\.\.\.`))
 
-						helpers.WaitForLogRateLimitToTakeEffect(appName, 0, 0, false, "512M")
+						helpers.WaitForLogRateLimitToTakeEffect(appName, 0, 0, false, "1M")
 					})
 
 					When("-f flag provided", func() {
@@ -252,7 +257,7 @@ var _ = Describe("scale command", func() {
 							Eventually(session).Should(Exit(0))
 							Expect(session).To(Say("Scaling app %s in org %s / space %s as %s...", appName, orgName, spaceName, userName))
 
-							helpers.WaitForLogRateLimitToTakeEffect(appName, 0, 0, false, "512M")
+							helpers.WaitForLogRateLimitToTakeEffect(appName, 0, 0, false, "1M")
 						})
 					})
 				})

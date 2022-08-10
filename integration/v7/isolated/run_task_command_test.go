@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"path"
 
+	"code.cloudfoundry.org/cli/api/cloudcontroller/ccversion"
 	"code.cloudfoundry.org/cli/integration/helpers"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -132,6 +133,9 @@ var _ = Describe("run-task command", func() {
 				})
 
 				When("log rate limit is provided", func() {
+					BeforeEach(func() {
+						helpers.SkipIfVersionLessThan(ccversion.MinVersionLogRateLimitingV3)
+					})
 					When("the provided log rate limit is invalid", func() {
 						It("displays error and exits 1", func() {
 							session := helpers.CF("run-task", appName, "--command", "echo hi", "-l", "invalid")
@@ -149,7 +153,7 @@ var _ = Describe("run-task command", func() {
 
 							session = helpers.CF("tasks", appName, "-v")
 							Eventually(session).Should(Exit(0))
-							Expect(session).To(Say("\"log_rate_limit_bytes_per_second\": %d", logRateLimit))
+							Expect(session).To(Say("\"log_rate_limit_in_bytes_per_second\": %d", logRateLimit))
 						})
 					})
 				})

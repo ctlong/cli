@@ -36,9 +36,9 @@ var _ = Describe("push with log rate limit flag", func() {
 			session := helpers.CF("app", appName)
 			Eventually(session).Should(Say(`name:\s+%s`, appName))
 			Eventually(session).Should(Say(`last uploaded:\s+%s`, helpers.ReadableDateTimeRegex))
-			//TODO: check output of push command
+			//TODO: get this assertation to work
 			// Eventually(session).Should(Say(`log rate usage per second:\s+5K`))
-			// Eventually(session).Should(Say(`\s+state\s+since\s+cpu\s+memory\s+disk\s+log rate per second`))
+			Eventually(session).Should(Say(`\s+state\s+since\s+cpu\s+memory\s+disk\s+logging`))
 			Eventually(session).Should(Say(`#0\s+running\s+\d{4}-[01]\d-[0-3]\dT[0-2][0-9]:[0-5]\d:[0-5]\dZ`))
 			Eventually(session).Should(Exit(0))
 		})
