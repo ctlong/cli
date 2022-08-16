@@ -353,7 +353,7 @@ processes:
 				BeforeEach(func() {
 					rawYAML = []byte(`---
 processes:
-- log_rate_limit_per_second: 512M
+- log-rate-limit-per-second: 512M
 `)
 				})
 
@@ -412,7 +412,7 @@ processes:
 		Context("when a log rate limit is provided", func() {
 			BeforeEach(func() {
 				rawYAML = []byte(`---
-log_rate_limit_per_second: 5K
+log-rate-limit-per-second: 5K
 `)
 			})
 
