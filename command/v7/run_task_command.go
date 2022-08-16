@@ -13,7 +13,7 @@ type RunTaskCommand struct {
 	RequiredArgs    flag.RunTaskArgsV7      `positional-args:"yes"`
 	Command         string                  `long:"command" short:"c" description:"The command to execute"`
 	Disk            flag.Megabytes          `short:"k" description:"Disk limit (e.g. 256M, 1024M, 1G)"`
-	LogRateLimit    flag.BytesWithUnlimited `short:"l" description:"Log rate limit per second, in bytes (e.g. 128B, 4K, 1M)"`
+	LogRateLimit    flag.BytesWithUnlimited `short:"l" description:"Log rate limit per second, in bytes (e.g. 128B, 4K, 1M). -l=-1 represents unlimited"`
 	Memory          flag.Megabytes          `short:"m" description:"Memory limit (e.g. 256M, 1024M, 1G)"`
 	Name            string                  `long:"name" description:"Name to give the task (generated if omitted)"`
 	Process         string                  `long:"process" description:"Process type to use as a template for command, memory, and disk for the created task."`

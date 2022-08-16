@@ -51,7 +51,7 @@ var _ = Describe("scale command", func() {
 				Eventually(session).Should(Say(`-f\s+Force restart of app without prompt`))
 				Eventually(session).Should(Say(`-i\s+Number of instances`))
 				Eventually(session).Should(Say(`-k\s+Disk limit \(e\.g\. 256M, 1024M, 1G\)`))
-				Eventually(session).Should(Say(`-l\s+Log rate limit per second, in bytes \(e\.g\. 128B, 4K, 1M\)`))
+				Eventually(session).Should(Say(`-l\s+Log rate limit per second, in bytes \(e\.g\. 128B, 4K, 1M\). -l=-1 represents unlimited`))
 				Eventually(session).Should(Say(`-m\s+Memory limit \(e\.g\. 256M, 1024M, 1G\)`))
 				Eventually(session).Should(Say(`--process\s+App process to scale \(Default: web\)`))
 

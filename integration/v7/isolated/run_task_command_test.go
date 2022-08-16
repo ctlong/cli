@@ -30,7 +30,7 @@ var _ = Describe("run-task command", func() {
 			Expect(session).To(Say("OPTIONS:"))
 			Expect(session).To(Say(`   --command, -c\s+The command to execute`))
 			Expect(session).To(Say(`   -k                 Disk limit \(e\.g\. 256M, 1024M, 1G\)`))
-			Expect(session).To(Say(`   -l                 Log rate limit per second, in bytes \(e\.g\. 128B, 4K, 1M\)`))
+			Expect(session).To(Say(`   -l                 Log rate limit per second, in bytes \(e\.g\. 128B, 4K, 1M\). -l=-1 represents unlimited`))
 			Expect(session).To(Say(`   -m                 Memory limit \(e\.g\. 256M, 1024M, 1G\)`))
 			Expect(session).To(Say(`   --name             Name to give the task \(generated if omitted\)`))
 			Expect(session).To(Say(`   --process          Process type to use as a template for command, memory, and disk for the created task`))
