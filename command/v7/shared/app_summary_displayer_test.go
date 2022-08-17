@@ -167,6 +167,44 @@ var _ = Describe("app summary displayer", func() {
 				})
 			})
 
+			When("the log rate is unlimited", func() {
+				BeforeEach(func() {
+					summary = v7action.DetailedApplicationSummary{
+						ApplicationSummary: v7action.ApplicationSummary{
+							Application: resources.Application{
+								GUID:  "some-app-guid",
+								State: constant.ApplicationStarted,
+							},
+							ProcessSummaries: v7action.ProcessSummaries{
+								{
+									Process: resources.Process{
+										Type:       constant.ProcessTypeWeb,
+										MemoryInMB: types.NullUint64{Value: 32, IsSet: true},
+										DiskInMB:   types.NullUint64{Value: 1024, IsSet: true},
+									},
+									Sidecars: []resources.Sidecar{},
+									InstanceDetails: []v7action.ProcessInstance{
+										v7action.ProcessInstance{
+											Index:        0,
+											State:        constant.ProcessInstanceRunning,
+											LogRate:      1024,
+											LogRateLimit: -1,
+										},
+									},
+								},
+							},
+						},
+					}
+				})
+
+				It("renders unlimited log rate limits correctly", func() {
+					processTable := helpers.ParseV3AppProcessTable(output.Contents())
+					webProcessSummary := processTable.Processes[0]
+
+					Expect(webProcessSummary.Instances[0].LogRate).To(Equal("1K/s of unlimited"))
+				})
+			})
+
 			When("some processes have > 0 instances and others have 0 instances", func() {
 				BeforeEach(func() {
 					summary = v7action.DetailedApplicationSummary{

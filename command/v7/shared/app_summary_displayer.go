@@ -72,6 +72,14 @@ func routeSummary(rs []resources.Route) string {
 	return strings.Join(formattedRoutes, ", ")
 }
 
+func formatLogRateLimit(limit int64) string {
+	if limit == -1 {
+		return "unlimited"
+	} else {
+		return bytefmt.ByteSize(uint64(limit)) + "/s"
+	}
+}
+
 func (display AppSummaryDisplayer) displayAppInstancesTable(processSummary v7action.ProcessSummary) {
 	table := [][]string{
 		{
@@ -100,9 +108,9 @@ func (display AppSummaryDisplayer) displayAppInstancesTable(processSummary v7act
 				"DiskUsage": bytefmt.ByteSize(instance.DiskUsage),
 				"DiskQuota": bytefmt.ByteSize(instance.DiskQuota),
 			}),
-			display.UI.TranslateText("{{.LogRate}}/s of {{.LogRateLimit}}/s", map[string]interface{}{
+			display.UI.TranslateText("{{.LogRate}}/s of {{.LogRateLimit}}", map[string]interface{}{
 				"LogRate":      bytefmt.ByteSize(instance.LogRate),
-				"LogRateLimit": bytefmt.ByteSize(instance.LogRateLimit),
+				"LogRateLimit": formatLogRateLimit(instance.LogRateLimit),
 			}),
 			instance.Details,
 		})

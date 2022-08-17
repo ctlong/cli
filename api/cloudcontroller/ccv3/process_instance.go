@@ -32,7 +32,7 @@ type ProcessInstance struct {
 	// MemoryUsage is the current memory usage of the instance.
 	MemoryUsage uint64
 	// LogRateLimit is the maximum rate that the instance is allowed to log.
-	LogRateLimit uint64
+	LogRateLimit int64
 	// LogRate is the current rate that the instance is logging.
 	LogRate uint64
 	// State is the state of the instance.
@@ -51,7 +51,7 @@ func (instance *ProcessInstance) UnmarshalJSON(data []byte) error {
 		Index            int64  `json:"index"`
 		IsolationSegment string `json:"isolation_segment"`
 		MemQuota         uint64 `json:"mem_quota"`
-		LogRateLimit     uint64 `json:"log_rate_limit"`
+		LogRateLimit     int64  `json:"log_rate_limit"`
 		State            string `json:"state"`
 		Type             string `json:"type"`
 		Uptime           int64  `json:"uptime"`
